@@ -4,6 +4,16 @@ body {
   background-color: #f1f3f4;
 }
 
+header {
+  align-items: start;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.event-card {
+  width: 50%
+}
+
 .fc {
   background-color: #ffffff;
   border-radius: 12px;
