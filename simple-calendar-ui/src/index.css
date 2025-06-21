@@ -10,8 +10,15 @@ header {
   justify-content: flex-start;
 }
 
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .event-card {
-  width: 50%
+  width: 50%;
+  padding: 2vw 4vw;
 }
 
 .fc {

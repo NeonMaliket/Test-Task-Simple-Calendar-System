@@ -1,27 +1,38 @@
 import { Box, Button } from "@mui/material";
 import type { FunctionComponent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+const CALENDAR_LOCATION = '/calendar'
+const ADD_EVENT_LOCATION = '/calendar/event/new'
 
 interface HeaderProps {
     title: string
 }
 
 const Header: FunctionComponent<HeaderProps> = (props: HeaderProps) => {
-    const navigate = useNavigate();
-    const onCalendarClick = () => navigate('/calendar');
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    const onCalendarClick = () => navigate(CALENDAR_LOCATION)
+    const onAddEventClick = () => navigate(ADD_EVENT_LOCATION)
+
+    const isCalendarPage = () => {
+        return location.pathname === CALENDAR_LOCATION
+    }
 
     return (<>
         <Box display="flex" justifyContent="space-between" width="100%">
             <div></div>
             <h1
-            style={{
-          position: 'absolute',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          margin: 0
-        }}
+                style={{
+                    position: 'absolute',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    margin: 0
+                }}
             >{props.title}</h1>
-            <Button onClick={onCalendarClick}>Calendar</Button>
+            {isCalendarPage() && <Button onClick={onAddEventClick}>Add Event</Button>}
+            {!isCalendarPage() && <Button onClick={onCalendarClick}>Calendar</Button>}
         </Box>
     </>);
 }
