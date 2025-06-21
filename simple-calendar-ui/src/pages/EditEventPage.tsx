@@ -1,22 +1,39 @@
-import { Button, Card, CardActions } from "@mui/material";
-import { useState, type FunctionComponent } from "react";
+import {Box, Button, Card, CardActions, Stack} from "@mui/material";
+import {type FunctionComponent, useEffect, useState} from "react";
 import CardInput from "../components/CardInput";
 import useEvents from "../hooks/EventHook";
-import type { CalendarEvent } from "../types/CalendarEvent";
-import { useNavigate, useParams } from "react-router-dom";
+import type {CalendarEvent} from "../types/CalendarEvent";
+import {useNavigate, useParams} from "react-router-dom";
+import {DateTimePicker} from "../components/DateTimePicker.tsx";
 
 const EditEventPage: FunctionComponent = () => {
-    const { id } = useParams()
+    const {id} = useParams()
     const navigate = useNavigate()
-    const { add, update, findById } = useEvents()
-    const [event, setEvent] = useState<CalendarEvent>(id ? findById(id)! : {
+    const {add, update, findById} = useEvents()
+    const [event, setEvent] = useState<CalendarEvent>({
         id: null,
         title: "",
         description: "",
         location: "",
-        startDateTime: new Date(),
-        endDateTime: new Date(),
+        startDateTime: null,
+        endDateTime: null,
     });
+
+    useEffect(() => {
+        if (id) {
+            const localEvent = findById(id)
+            if (localEvent) {
+                setEvent({...localEvent})
+            }
+        }
+    }, [id])
+
+    const isDatesValid = () => {
+        const startDateTime = event.startDateTime
+        const endDateTime = event.endDateTime
+
+        return startDateTime && endDateTime && startDateTime < endDateTime
+    }
 
     const disabledButton = (): boolean => {
         return (
@@ -24,7 +41,8 @@ const EditEventPage: FunctionComponent = () => {
             !event.description.trim() ||
             !event.location.trim() ||
             !event.startDateTime ||
-            !event.endDateTime
+            !event.endDateTime ||
+            !isDatesValid()
         );
     }
 
@@ -37,20 +55,31 @@ const EditEventPage: FunctionComponent = () => {
         navigate('/calendar')
     }
 
-    return (<>
+    return (
         <div className="center">
             <Card className="event-card">
-                <CardInput label="Title" icon="title" value={event.title} onChange={(text) => setEvent({ ...event, title: text })} />
-                <CardInput label="Description" icon="description" value={event.description} onChange={(text) => setEvent({ ...event, description: text })} />
-                <CardInput label="Location" icon="add_location_alt" value={event.location} onChange={(text) => setEvent({ ...event, location: text })} />
-                <CardInput label="Start Date" icon="today" value={event.startDateTime?.toISOString()} onChange={(text) => setEvent({ ...event, startDateTime: new Date() })} />
-                <CardInput label="End Date" icon="work_history" value={event.endDateTime?.toISOString()} onChange={(text) => setEvent({ ...event, endDateTime: new Date() })} />
-                <CardActions sx={{ justifyContent: 'flex-end' }}>
-                    <Button size="small" disabled={disabledButton()} onClick={addOrUpdate}>Add</Button>
+                <CardInput label="Title" icon="title" value={event.title}
+                           onChange={(text) => setEvent({...event, title: text})}/>
+                <CardInput label="Description" icon="description" value={event.description}
+                           onChange={(text) => setEvent({...event, description: text})}/>
+                <CardInput label="Location" icon="add_location_alt" value={event.location}
+                           onChange={(text) => setEvent({...event, location: text})}/>
+                <Box height="25px"/>
+                <Stack direction="row" justifyContent="space-between">
+                    <DateTimePicker value={event.startDateTime}
+                                    onSelected={(date) => setEvent({...event, startDateTime: date})}
+                                    label="Start Date Time"/>
+                    <DateTimePicker value={event.endDateTime}
+                                    onSelected={(date) => setEvent({...event, endDateTime: date})}
+                                    label="End Date Time"/>
+                </Stack>
+                <CardActions sx={{justifyContent: 'flex-end'}}>
+                    <Button size="small" disabled={disabledButton()} onClick={addOrUpdate}>{id ? 'Edit' : 'Add'}</Button>
                 </CardActions>
             </Card>
         </div>
-    </>);
+    )
+        ;
 }
 
 export default EditEventPage;

@@ -1,6 +1,6 @@
-import { Box, Button } from "@mui/material";
-import type { FunctionComponent } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {Box, Button} from "@mui/material";
+import type {FunctionComponent} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const CALENDAR_LOCATION = '/calendar'
 const ADD_EVENT_LOCATION = '/calendar/event/new'
@@ -20,7 +20,7 @@ const Header: FunctionComponent<HeaderProps> = (props: HeaderProps) => {
         return location.pathname === CALENDAR_LOCATION
     }
 
-    return (<>
+    return (
         <Box display="flex" justifyContent="space-between" width="100%">
             <div></div>
             <h1
@@ -34,7 +34,7 @@ const Header: FunctionComponent<HeaderProps> = (props: HeaderProps) => {
             {isCalendarPage() && <Button onClick={onAddEventClick}>Add Event</Button>}
             {!isCalendarPage() && <Button onClick={onCalendarClick}>Calendar</Button>}
         </Box>
-    </>);
+    );
 }
 
 export default Header;

@@ -1,20 +1,24 @@
-import type { EventClickArg } from '@fullcalendar/core'
+import type {EventClickArg} from '@fullcalendar/core'
 
 import interactionPlugin from '@fullcalendar/interaction'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import useEvents from '../hooks/EventHook'
 
 const CalendarPage: React.FC = () => {
-    const { events } = useEvents()
+    const {events} = useEvents()
     const navigate = useNavigate()
 
     const handleEventClick = (clickInfo: EventClickArg) => {
         const id = clickInfo.event.id
         navigate(`/calendar/event/${id}`)
+    }
+
+    const handleNewEvent = () => {
+        navigate('/calendar/event/new')
     }
 
     const calendarEvents = () => {
@@ -35,21 +39,21 @@ const CalendarPage: React.FC = () => {
     }
 
     return (
-        <>
-            <FullCalendar
-                plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
-                initialView="dayGridMonth"
-                selectable={true}
-                events={calendarEvents()}
-                eventClick={handleEventClick}
-                headerToolbar={{
-                    left: 'prev,next',
-                    center: 'title',
-                    right: 'today',
-                }}
-                nowIndicator
-                height="auto"
-            /></>
+        <FullCalendar
+            plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
+            initialView="dayGridMonth"
+            selectable={true}
+            dateClick={handleNewEvent}
+            events={calendarEvents()}
+            eventClick={handleEventClick}
+            headerToolbar={{
+                left: 'prev,next',
+                center: 'title',
+                right: 'today',
+            }}
+            nowIndicator
+            height="auto"
+        />
     )
 }
 

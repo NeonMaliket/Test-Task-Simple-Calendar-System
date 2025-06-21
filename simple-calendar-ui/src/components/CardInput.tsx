@@ -1,5 +1,5 @@
-import { Box, FormControl, FormHelperText, Icon, TextField } from "@mui/material";
-import { useState, type FunctionComponent } from "react";
+import {Box, FormControl, FormHelperText, Icon, TextField} from "@mui/material";
+import {type FunctionComponent, useState} from "react";
 
 interface CardInputProps {
     label: string
@@ -21,12 +21,12 @@ const CardInput: FunctionComponent<CardInputProps> = (props) => {
         props.onChange(text)
     }
 
-    return (<>
+    return (
         <Box display="flex" alignItems="flex-end" height="75px">
             <Icon fontSize="large" color="primary">
                 {props.icon}
             </Icon>
-            <Box mx={2} />
+            <Box mx={2}/>
             <FormControl error variant="standard" fullWidth>
                 <TextField
                     required
@@ -44,7 +44,7 @@ const CardInput: FunctionComponent<CardInputProps> = (props) => {
                 {(error && <FormHelperText>{error}</FormHelperText>)}
             </FormControl>
         </Box>
-    </>);
+    );
 }
 
 export default CardInput;

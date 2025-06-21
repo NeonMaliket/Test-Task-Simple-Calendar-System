@@ -1,8 +1,8 @@
 export interface CalendarEvent {
-    id: string | null
+    id?: string | null
     title: string
     description: string
-    startDateTime: Date | null
-    endDateTime: Date | null
+    startDateTime?: Date | null
+    endDateTime?: Date | null
     location: string
 }
