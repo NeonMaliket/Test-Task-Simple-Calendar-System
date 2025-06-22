@@ -1,7 +1,7 @@
 // @ts-ignore
 import type {DateSelectArg} from '@fullcalendar/interaction'
 import interactionPlugin from '@fullcalendar/interaction'
-import type {EventClickArg} from '@fullcalendar/core'
+import type {EventClickArg, EventContentArg} from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -9,6 +9,7 @@ import React from 'react'
 import {useNavigate} from 'react-router-dom'
 import useEvents from '../hooks/EventHook'
 import type {DateRange} from "../types/DateRange.ts";
+import {Event} from "../components/Event.tsx";
 
 const CalendarPage: React.FC = () => {
     const {events} = useEvents()
@@ -44,15 +45,23 @@ const CalendarPage: React.FC = () => {
         navigate(`/calendar/event/${event.event.id}`)
     }
 
+    const renderEventContent = (eventInfo: EventContentArg): JSX.Element => (
+        <Event eventInfo={eventInfo} />
+    );
+
     return (
         <FullCalendar
             plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
             initialView="dayGridMonth"
+
             selectable={true}
             selectMirror={true}
             select={handleSelect}
+
             events={mappedCalendarEvents()}
             eventClick={onEventClick}
+            eventContent={renderEventContent}
+
             headerToolbar={{
                 left: 'prev,next',
                 center: 'title',

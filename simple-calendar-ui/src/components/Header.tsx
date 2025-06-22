@@ -1,6 +1,8 @@
 import {Box, Button} from "@mui/material";
 import type {FunctionComponent} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
+import type {DateRange} from "../types/DateRange.ts";
+import {datePlusOneDay} from "../shared/DateUtils.ts";
 
 const CALENDAR_LOCATION = '/calendar'
 const ADD_EVENT_LOCATION = '/calendar/event/new'
@@ -14,7 +16,15 @@ const Header: FunctionComponent<HeaderProps> = (props: HeaderProps) => {
     const location = useLocation()
 
     const onCalendarClick = () => navigate(CALENDAR_LOCATION)
-    const onAddEventClick = () => navigate(ADD_EVENT_LOCATION)
+    const onAddEventClick = () => {
+        const range: DateRange = {
+            start: new Date(),
+            end: datePlusOneDay(new Date())
+        }
+        navigate(ADD_EVENT_LOCATION, {
+            state: range
+        })
+    }
 
     const isCalendarPage = () => {
         return location.pathname === CALENDAR_LOCATION

@@ -6,6 +6,7 @@ import com.simplecalendarapi.simplecalendarapi.validators.date.DateRange;
 import com.simplecalendarapi.simplecalendarapi.validators.date.ValidDateRange;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -16,8 +17,10 @@ import java.time.LocalDateTime;
 @ValidDateRange
 public record CalendarEventDto(
         String id,
+        @Size(max = 20, message = "Title cannot be more than 10 characters")
         @NotBlank(message = "Title cannot be empty")
         String title,
+        @Size(max = 1000, message = "Description cannot be more than 1000 characters")
         @NotBlank(message = "Description cannot be empty")
         String description,
         @NotNull(message = "Start date time cannot be empty")
@@ -32,6 +35,7 @@ public record CalendarEventDto(
                 timezone = "UTC")
         LocalDateTime endDateTime,
 
+        @Size(max = 50, message = "Location cannot be more than 50 characters")
         @NotBlank(message = "Location cannot be empty")
         String location
 ) implements DateRange {

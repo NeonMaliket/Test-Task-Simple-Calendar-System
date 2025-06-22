@@ -19,8 +19,8 @@ const EditEventPage: FunctionComponent = () => {
         title: "",
         description: "",
         location: "",
-        startDateTime: dayjs(location.state.start).toDate(),
-        endDateTime: dayjs(location.state.end).toDate(),
+        startDateTime: dayjs(location.state?.start).toDate() ?? new Date(),
+        endDateTime: dayjs(location.state?.end).toDate() ?? new Date(),
     });
 
     useEffect(() => {
@@ -69,10 +69,13 @@ const EditEventPage: FunctionComponent = () => {
         <div className="center">
             <Card className="event-card">
                 <CardInput label="Title" icon="title" value={event.title}
+                           maxLength={20}
                            onChange={(text) => setEvent({...event, title: text})}/>
                 <CardInput label="Description" icon="description" value={event.description}
+                           maxLength={1000}
                            onChange={(text) => setEvent({...event, description: text})}/>
                 <CardInput label="Location" icon="add_location_alt" value={event.location}
+                           maxLength={50}
                            onChange={(text) => setEvent({...event, location: text})}/>
                 <Box height="25px"/>
                 <Stack direction="row" justifyContent="space-between">

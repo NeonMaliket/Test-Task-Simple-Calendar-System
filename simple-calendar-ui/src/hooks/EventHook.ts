@@ -1,57 +1,56 @@
 import {useEffect, useState} from "react";
 import type {CalendarEvent} from "../types/CalendarEvent";
-import {createEvent, deleteEvent, getAllEvents, getEventById, updateEvent} from "../api/CalendarEventsApi";
+import {createEvent, deleteEvent, getAllEvents, getEventById, updateEvent} from "../services/CalendarEventsService.ts";
 
 const useEvents = () => {
     const [events, setEvents] = useState<CalendarEvent[]>([])
-    const [errors, setErrors] = useState<Error | null>()
 
     useEffect(() => {
-        loadEvents().catch(error => setErrors(error))
+        loadEvents().catch(error => console.error(error))
     }, [])
 
     const loadEvents = async () => {
         getAllEvents()
             .then(events => setEvents(events))
-            .catch(error => setErrors(error))
+            .catch(error => console.error(error))
     }
 
     const findById = async (id: string) => {
         try {
             return await getEventById(id)
         } catch (error) {
-            setErrors(error as Error)
+            console.error(error)
         }
     }
 
     const add = async (event: CalendarEvent) => {
         try {
             await createEvent(event)
-            loadEvents().catch(error => setErrors(error))
+            loadEvents().catch(error => console.error(error))
         } catch (error) {
-            setErrors(error as Error)
+            console.error(error)
         }
     }
 
     const update = async (id: string, event: CalendarEvent) => {
         try {
             await updateEvent(id, event)
-            loadEvents().catch(error => setErrors(error))
+            loadEvents().catch(error => console.error(error))
         } catch (error) {
-            setErrors(error as Error)
+            console.error(error)
         }
     }
 
     const remove = async (id: string) => {
         try {
             await deleteEvent(id)
-            loadEvents().catch(error => setErrors(error))
+            loadEvents().catch(error => console.error(error))
         } catch (error) {
-            setErrors(error as Error)
+            console.error(error)
         }
     }
 
-    return {events, errors, add, update, remove, findById}
+    return {events, add, update, remove, findById}
 }
 
 export default useEvents;

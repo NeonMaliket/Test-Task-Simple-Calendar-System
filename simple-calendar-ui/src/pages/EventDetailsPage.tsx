@@ -6,7 +6,7 @@ import CardRow from "../components/CardRow";
 import useEvents from "../hooks/EventHook";
 import type {DateRange} from "../types/DateRange.ts";
 import dayjs from "dayjs";
-import {DATE_FORMAT} from "../constants/date.ts";
+import {DATE_FORMAT} from "../constants/DateConstants.ts";
 
 
 const EventDetailsPage: React.FC = () => {
@@ -31,7 +31,7 @@ const EventDetailsPage: React.FC = () => {
     const editEvent = () => {
         const range: DateRange = {
             start: event ? event.startDateTime : new Date(),
-            end: event ? event.endDateTime: new Date()
+            end: event ? event.endDateTime : new Date()
         }
         navigate(`/calendar/event/edit/${id}`, {
             state: range

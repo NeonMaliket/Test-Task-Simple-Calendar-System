@@ -29,7 +29,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDto> handleException(Exception e) {
-        var response = ExceptionDto.builder().message(e.getMessage())
+        var response = ExceptionDto.builder().message("Invalid request")
                 .error("Bad Request")
                 .status(400)
                 .timestamp(LocalDateTime.now().toString())
