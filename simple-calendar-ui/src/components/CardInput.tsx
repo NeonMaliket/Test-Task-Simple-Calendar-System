@@ -7,6 +7,7 @@ interface CardInputProps {
     icon: string
     maxLength?: number
     onChange: (text: string) => void
+    required?: boolean
 }
 
 const CardInput: FunctionComponent<CardInputProps> = (props) => {
@@ -35,7 +36,7 @@ const CardInput: FunctionComponent<CardInputProps> = (props) => {
             <Box mx={2}/>
             <FormControl error variant="standard" fullWidth>
                 <TextField
-                    required
+                    required={props.required ?? false}
                     slotProps={{
                         inputLabel: {
                             shrink: Boolean(props.value)

@@ -6,6 +6,8 @@ import type {CalendarEvent} from "../types/CalendarEvent";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {DateTimePicker} from "../components/DateTimePicker.tsx";
 import dayjs from "dayjs";
+import TimeZoneSelector from "../components/TimeZonePicker.tsx";
+import {userTimeZone} from "../shared/DateUtils.ts";
 
 
 const EditEventPage: FunctionComponent = () => {
@@ -21,6 +23,7 @@ const EditEventPage: FunctionComponent = () => {
         location: "",
         startDateTime: dayjs(location.state?.start).toDate() ?? new Date(),
         endDateTime: dayjs(location.state?.end).toDate() ?? new Date(),
+        timeZone: userTimeZone
     });
 
     useEffect(() => {
@@ -28,11 +31,7 @@ const EditEventPage: FunctionComponent = () => {
             findById(id)
                 .then((localEvent) => {
                     if (localEvent) {
-                        setEvent({
-                            ...localEvent,
-                            startDateTime: localEvent.startDateTime,
-                            endDateTime: localEvent.endDateTime
-                        })
+                        setEvent(localEvent)
                     }
                 })
         }
@@ -48,8 +47,6 @@ const EditEventPage: FunctionComponent = () => {
     const disabledButton = (): boolean => {
         return (
             !event.title.trim() ||
-            !event.description.trim() ||
-            !event.location.trim() ||
             !event.startDateTime ||
             !event.endDateTime ||
             !isDatesValid()
@@ -57,6 +54,7 @@ const EditEventPage: FunctionComponent = () => {
     }
 
     const addOrUpdate = async () => {
+        console.log("SAVING: ", event)
         if (id) {
             await update(id, event)
         } else {
@@ -70,12 +68,12 @@ const EditEventPage: FunctionComponent = () => {
             <Card className="event-card">
                 <CardInput label="Title" icon="title" value={event.title}
                            maxLength={20}
+                           required
                            onChange={(text) => setEvent({...event, title: text})}/>
                 <CardInput label="Description" icon="description" value={event.description}
-                           maxLength={1000}
+                           maxLength={50}
                            onChange={(text) => setEvent({...event, description: text})}/>
                 <CardInput label="Location" icon="add_location_alt" value={event.location}
-                           maxLength={50}
                            onChange={(text) => setEvent({...event, location: text})}/>
                 <Box height="25px"/>
                 <Stack direction="row" justifyContent="space-between">
@@ -86,6 +84,8 @@ const EditEventPage: FunctionComponent = () => {
                                     onSelected={(date) => setEvent({...event, endDateTime: date})}
                                     label="End Date Time"/>
                 </Stack>
+                <Box height="25px"/>
+                <TimeZoneSelector onChange={(zone) => setEvent({...event, timeZone: zone})}/>
                 {!isDatesValid() && (
                     <Box mt={2} ml={1}>
                         <Typography variant="body2" color="error">

@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import type {CalendarEvent} from "../types/CalendarEvent";
 import {createEvent, deleteEvent, getAllEvents, getEventById, updateEvent} from "../services/CalendarEventsService.ts";
+import {convertEventToUtc, withLocalTimeZone} from "../shared/DateUtils.ts";
 
 const useEvents = () => {
     const [events, setEvents] = useState<CalendarEvent[]>([])
@@ -9,15 +10,22 @@ const useEvents = () => {
         loadEvents().catch(error => console.error(error))
     }, [])
 
+    const wrapEventDatesWithLocalTimeZone = (event: CalendarEvent): CalendarEvent => {
+        return {
+            ...event,
+            startDateTime: withLocalTimeZone(event.startDateTime).toDate(),
+            endDateTime: withLocalTimeZone(event.endDateTime).toDate()
+        }
+    }
     const loadEvents = async () => {
         getAllEvents()
-            .then(events => setEvents(events))
+            .then(events => setEvents(events.map(wrapEventDatesWithLocalTimeZone)))
             .catch(error => console.error(error))
     }
 
     const findById = async (id: string) => {
         try {
-            return await getEventById(id)
+            return await getEventById(id).then(wrapEventDatesWithLocalTimeZone)
         } catch (error) {
             console.error(error)
         }
@@ -25,7 +33,7 @@ const useEvents = () => {
 
     const add = async (event: CalendarEvent) => {
         try {
-            await createEvent(event)
+            await createEvent(convertEventToUtc(event))
             loadEvents().catch(error => console.error(error))
         } catch (error) {
             console.error(error)
@@ -34,7 +42,7 @@ const useEvents = () => {
 
     const update = async (id: string, event: CalendarEvent) => {
         try {
-            await updateEvent(id, event)
+            await updateEvent(id, convertEventToUtc(event))
             loadEvents().catch(error => console.error(error))
         } catch (error) {
             console.error(error)

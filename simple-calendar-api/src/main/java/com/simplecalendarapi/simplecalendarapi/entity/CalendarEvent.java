@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * @author Ma1iket
@@ -31,11 +32,14 @@ public class CalendarEvent implements Serializable {
     private String description;
 
     @Column(name = "start_date_time", nullable = false)
-    private LocalDateTime startDateTime;
+    private OffsetDateTime startDateTime;
 
     @Column(name = "end_date_time", nullable = false)
-    private LocalDateTime endDateTime;
+    private OffsetDateTime endDateTime;
 
     @Column(name = "location", nullable = false)
     private String location;
+
+    @Column(name = "time_zone", nullable = false)
+    private String timeZone;
 }

@@ -60,6 +60,7 @@ public class CalendarEventServiceImpl implements CalendarEventService {
                 .startDateTime(calendarEventDto.startDateTime())
                 .endDateTime(calendarEventDto.endDateTime())
                 .location(calendarEventDto.location())
+                .timeZone(calendarEventDto.timeZone())
                 .build();
 
         var saved = calendarEventRepository.save(updatedEvent);

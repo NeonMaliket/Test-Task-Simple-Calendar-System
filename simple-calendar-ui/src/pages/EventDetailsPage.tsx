@@ -4,9 +4,9 @@ import {useNavigate, useParams} from "react-router-dom";
 import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
 import CardRow from "../components/CardRow";
 import useEvents from "../hooks/EventHook";
-import type {DateRange} from "../types/DateRange.ts";
 import dayjs from "dayjs";
 import {DATE_FORMAT} from "../constants/DateConstants.ts";
+import {getTimeZoneOffset} from "../shared/DateUtils.ts";
 
 
 const EventDetailsPage: React.FC = () => {
@@ -29,13 +29,7 @@ const EventDetailsPage: React.FC = () => {
     }, [id])
 
     const editEvent = () => {
-        const range: DateRange = {
-            start: event ? event.startDateTime : new Date(),
-            end: event ? event.endDateTime : new Date()
-        }
-        navigate(`/calendar/event/edit/${id}`, {
-            state: range
-        })
+        navigate(`/calendar/event/edit/${id}`)
     }
 
     const deleteEvent = async () => {
@@ -62,6 +56,8 @@ const EventDetailsPage: React.FC = () => {
                              desc={event && formattedDate(event.startDateTime)}></CardRow>
                     <CardRow title="End Date" icon="work_history"
                              desc={event && formattedDate(event.endDateTime)}></CardRow>
+                    <CardRow title="Time Zone" icon="public"
+                             desc={event && `(${getTimeZoneOffset(event?.timeZone)}) - ${event?.timeZone}`}></CardRow>
                 </CardContent>
                 <CardActions sx={{justifyContent: 'flex-end'}}>
                     <Button size="small" color="error" onClick={deleteEvent}>Delete</Button>
