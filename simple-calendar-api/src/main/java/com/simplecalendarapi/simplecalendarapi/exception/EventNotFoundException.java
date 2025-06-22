@@ -15,6 +15,4 @@ public class EventNotFoundException extends RuntimeException {
     public EventNotFoundException(String id) {
         super(MessageFormat.format(MESSAGE, id));
     }
-
-
 }
