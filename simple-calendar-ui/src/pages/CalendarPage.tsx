@@ -1,34 +1,26 @@
-import type {EventClickArg} from '@fullcalendar/core'
-
+// @ts-ignore
+import type {DateSelectArg} from '@fullcalendar/interaction'
 import interactionPlugin from '@fullcalendar/interaction'
+import type {EventClickArg} from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
 import useEvents from '../hooks/EventHook'
+import type {DateRange} from "../types/DateRange.ts";
 
 const CalendarPage: React.FC = () => {
     const {events} = useEvents()
     const navigate = useNavigate()
 
-    const handleEventClick = (clickInfo: EventClickArg) => {
-        const id = clickInfo.event.id
-        navigate(`/calendar/event/${id}`)
-    }
-
-    const handleNewEvent = () => {
-        navigate('/calendar/event/new')
-    }
-
-    const calendarEvents = () => {
-        // 2025-06-22T10:00:00
+    const mappedCalendarEvents = () => {
         return events.map((event) => {
             return {
                 id: event.id ?? '',
                 title: event.title,
-                start: event.startDateTime?.toISOString(),
-                end: event.endDateTime?.toISOString(),
+                start: event.startDateTime,
+                end: event.endDateTime,
                 allDay: false,
                 extendedProps: {
                     description: event.description,
@@ -38,21 +30,36 @@ const CalendarPage: React.FC = () => {
         })
     }
 
+    const handleSelect = (selectInfo: DateSelectArg) => {
+        let dataRange: DateRange = {
+            start: selectInfo.start,
+            end: selectInfo.end,
+        };
+        navigate('/calendar/event/new', {
+            state: dataRange
+        })
+    }
+
+    const onEventClick = (event: EventClickArg) => {
+        navigate(`/calendar/event/${event.event.id}`)
+    }
+
     return (
         <FullCalendar
             plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
             initialView="dayGridMonth"
             selectable={true}
-            dateClick={handleNewEvent}
-            events={calendarEvents()}
-            eventClick={handleEventClick}
+            selectMirror={true}
+            select={handleSelect}
+            events={mappedCalendarEvents()}
+            eventClick={onEventClick}
             headerToolbar={{
                 left: 'prev,next',
                 center: 'title',
                 right: 'today',
             }}
             nowIndicator
-            height="auto"
+            height="80vh"
         />
     )
 }

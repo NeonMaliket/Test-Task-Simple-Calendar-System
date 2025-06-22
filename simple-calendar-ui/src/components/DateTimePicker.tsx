@@ -15,9 +15,9 @@ const StyledDay = styled(PickersDay)(({theme}) => ({
 }));
 
 type DateTimePickerProps = {
-    value?: Date | null,
+    value: Date,
     label: string,
-    onSelected: (date?: Date) => void
+    onSelected: (date: Date) => void
 };
 export const DateTimePicker: FunctionComponent<DateTimePickerProps> = (props: DateTimePickerProps) => {
     return (
@@ -28,8 +28,8 @@ export const DateTimePicker: FunctionComponent<DateTimePickerProps> = (props: Da
                     openPickerButton: StyledButton,
                     day: StyledDay,
                 }}
-                value={dayjs(props.value)}
-                onChange={(event) => props.onSelected(event?.toDate())}
+                value={ props.value ? dayjs(props.value) : null}
+                onChange={(event) => props.onSelected(event?.toDate() ?? new Date())}
                 slotProps={{
                     openPickerIcon: {fontSize: 'large'},
                     openPickerButton: {color: 'primary'},

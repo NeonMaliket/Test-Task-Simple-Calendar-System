@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./simple-calendar-ui
+      dockerfile: Dockerfile
+    container_name: calendar-frontend
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    networks:
+      - calendar-network
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./simple-calendar-api
+      dockerfile: Dockerfile
+    container_name: calendar-backend
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/simple_calendar_db
+      SPRING_DATASOURCE_USERNAME: calendar_user
+      SPRING_DATASOURCE_PASSWORD: calendar_password
+      CORS_ALLOWED_ORIGIN: http://localhost:3000
+    networks:
+      - calendar-network
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: calendar-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: simple_calendar_db
+      MYSQL_USER: calendar_user
+      MYSQL_PASSWORD: calendar_password
+    ports:
+      - "3306:3306"
+    networks:
+      - calendar-network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  calendar-network:
+    driver: bridge

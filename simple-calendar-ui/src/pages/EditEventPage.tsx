@@ -3,28 +3,33 @@ import {type FunctionComponent, useEffect, useState} from "react";
 import CardInput from "../components/CardInput";
 import useEvents from "../hooks/EventHook";
 import type {CalendarEvent} from "../types/CalendarEvent";
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {DateTimePicker} from "../components/DateTimePicker.tsx";
+
 
 const EditEventPage: FunctionComponent = () => {
     const {id} = useParams()
     const navigate = useNavigate()
+    const location = useLocation()
+
     const {add, update, findById} = useEvents()
     const [event, setEvent] = useState<CalendarEvent>({
         id: null,
         title: "",
         description: "",
         location: "",
-        startDateTime: null,
-        endDateTime: null,
+        startDateTime: location.state.start,
+        endDateTime: location.state.end,
     });
 
     useEffect(() => {
         if (id) {
-            const localEvent = findById(id)
-            if (localEvent) {
-                setEvent({...localEvent})
-            }
+            findById(id)
+                .then((localEvent) => {
+                    if (localEvent) {
+                        setEvent({...localEvent})
+                    }
+                })
         }
     }, [id])
 
@@ -46,11 +51,11 @@ const EditEventPage: FunctionComponent = () => {
         );
     }
 
-    const addOrUpdate = () => {
+    const addOrUpdate = async () => {
         if (id) {
-            update(id, event)
+            await update(id, event)
         } else {
-            add(event)
+            await add(event)
         }
         navigate('/calendar')
     }
@@ -73,13 +78,14 @@ const EditEventPage: FunctionComponent = () => {
                                     onSelected={(date) => setEvent({...event, endDateTime: date})}
                                     label="End Date Time"/>
                 </Stack>
+                <Box height="25px"/>
                 <CardActions sx={{justifyContent: 'flex-end'}}>
-                    <Button size="small" disabled={disabledButton()} onClick={addOrUpdate}>{id ? 'Edit' : 'Add'}</Button>
+                    <Button size="small" disabled={disabledButton()}
+                            onClick={addOrUpdate}>{id ? 'Edit' : 'Add'}</Button>
                 </CardActions>
             </Card>
         </div>
-    )
-        ;
+    );
 }
 
 export default EditEventPage;

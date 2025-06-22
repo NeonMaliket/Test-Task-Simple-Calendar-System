@@ -1,56 +1,57 @@
-import { useState } from "react";
-import type { CalendarEvent } from "../types/CalendarEvent";
-
-// const URL = 'http://localhost:8080/api/calendar'
+import {useEffect, useState} from "react";
+import type {CalendarEvent} from "../types/CalendarEvent";
+import {createEvent, deleteEvent, getAllEvents, getEventById, updateEvent} from "../api/CalendarEventsApi";
 
 const useEvents = () => {
-    const [events, setEvents] = useState<CalendarEvent[]>([
-        {
-            id: '1',
-            title: '7-8',
-            description: 'desc',
-            startDateTime: new Date(),
-            endDateTime: new Date(),
-            location: 'LOCATION'
-        },
-        {
-            id: '2',
-            title: '2-2',
-            description: 'desc',
-            startDateTime: new Date(),
-            endDateTime: new Date(),
-            location: 'LOCATION'
+    const [events, setEvents] = useState<CalendarEvent[]>([])
+    const [errors, setErrors] = useState<Error | null>()
+
+    useEffect(() => {
+        loadEvents().catch(error => setErrors(error))
+    }, [])
+
+    const loadEvents = async () => {
+        getAllEvents()
+            .then(events => setEvents(events))
+            .catch(error => setErrors(error))
+    }
+
+    const findById = async (id: string) => {
+        try {
+            return await getEventById(id)
+        } catch (error) {
+            setErrors(error as Error)
         }
-    ])
-    const [errors] = useState<Error | null>()
-
-    const findById = (id: string) => {
-        const result = events.find((event) => event.id === id)
-        console.log("RESULT: ", result);
-
-        return result
     }
 
-    const add = (event: CalendarEvent) => {
-        console.log("add: ", event)
-        const localEvents = events
-        localEvents.push(event)
-        setEvents(localEvents)
-        console.log("EVENTS: ", events)
-
+    const add = async (event: CalendarEvent) => {
+        try {
+            await createEvent(event)
+            loadEvents().catch(error => setErrors(error))
+        } catch (error) {
+            setErrors(error as Error)
+        }
     }
 
-    const update = (id: string, event: CalendarEvent) => {
-        console.log("id: ", id)
-        console.log("update: ", event)
+    const update = async (id: string, event: CalendarEvent) => {
+        try {
+            await updateEvent(id, event)
+            loadEvents().catch(error => setErrors(error))
+        } catch (error) {
+            setErrors(error as Error)
+        }
     }
 
-    const remove = (id: string) => {
-        console.log("deletiong with id: ", id)
-
+    const remove = async (id: string) => {
+        try {
+            await deleteEvent(id)
+            loadEvents().catch(error => setErrors(error))
+        } catch (error) {
+            setErrors(error as Error)
+        }
     }
 
-    return { events, errors, add, update, remove, findById }
+    return {events, errors, add, update, remove, findById}
 }
 
 export default useEvents;
