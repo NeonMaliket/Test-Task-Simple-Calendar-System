@@ -1,5 +1,6 @@
 import type {CalendarEvent} from "../types/CalendarEvent";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const BASE_URL = 'http://localhost:8080/api/calendar/events';
 
@@ -15,7 +16,12 @@ export const getAllEvents = async (): Promise<CalendarEvent[]> => {
 
 export const getEventById = async (id: string): Promise<CalendarEvent> => {
     const response = await axios.get(`${BASE_URL}/${id}`);
-    return response.data;
+    const data = response.data;
+    return {
+        ...data,
+        startDateTime: dayjs(data.startDateTime).toDate(),
+        endDateTime: dayjs(data.endDateTime).toDate(),
+    };
 };
 
 export const updateEvent = async (id: string, event: CalendarEvent): Promise<CalendarEvent> => {

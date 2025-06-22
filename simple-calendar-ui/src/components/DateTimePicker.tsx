@@ -2,6 +2,7 @@ import type {FunctionComponent} from "react";
 import {DateTimePicker as MuiDateTimePicker, PickersDay} from "@mui/x-date-pickers";
 import {IconButton, styled} from "@mui/material";
 import dayjs from "dayjs"
+import {DATE_FORMAT} from "../constants/date.ts";
 
 const StyledButton = styled(IconButton)(({theme}) => ({
     borderRadius: theme.shape.borderRadius,
@@ -23,6 +24,8 @@ export const DateTimePicker: FunctionComponent<DateTimePickerProps> = (props: Da
     return (
         <div>
             <MuiDateTimePicker
+                format={DATE_FORMAT}
+                ampm={false}
                 label={props.label}
                 slots={{
                     openPickerButton: StyledButton,

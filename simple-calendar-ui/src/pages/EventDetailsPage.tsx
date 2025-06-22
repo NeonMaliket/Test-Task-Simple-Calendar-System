@@ -5,6 +5,8 @@ import {Button, Card, CardActions, CardContent, Typography} from "@mui/material"
 import CardRow from "../components/CardRow";
 import useEvents from "../hooks/EventHook";
 import type {DateRange} from "../types/DateRange.ts";
+import dayjs from "dayjs";
+import {DATE_FORMAT} from "../constants/date.ts";
 
 
 const EventDetailsPage: React.FC = () => {
@@ -44,7 +46,7 @@ const EventDetailsPage: React.FC = () => {
     }
 
     const formattedDate = (date: Date) => {
-        return date.toLocaleString('en-GB', {hour12: false})
+        return dayjs(date).format(DATE_FORMAT)
     }
 
     return (

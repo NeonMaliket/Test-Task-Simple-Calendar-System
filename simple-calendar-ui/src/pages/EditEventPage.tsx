@@ -1,10 +1,11 @@
-import {Box, Button, Card, CardActions, Stack} from "@mui/material";
+import {Box, Button, Card, CardActions, Stack, Typography} from "@mui/material";
 import {type FunctionComponent, useEffect, useState} from "react";
 import CardInput from "../components/CardInput";
 import useEvents from "../hooks/EventHook";
 import type {CalendarEvent} from "../types/CalendarEvent";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {DateTimePicker} from "../components/DateTimePicker.tsx";
+import dayjs from "dayjs";
 
 
 const EditEventPage: FunctionComponent = () => {
@@ -18,8 +19,8 @@ const EditEventPage: FunctionComponent = () => {
         title: "",
         description: "",
         location: "",
-        startDateTime: location.state.start,
-        endDateTime: location.state.end,
+        startDateTime: dayjs(location.state.start).toDate(),
+        endDateTime: dayjs(location.state.end).toDate(),
     });
 
     useEffect(() => {
@@ -27,7 +28,11 @@ const EditEventPage: FunctionComponent = () => {
             findById(id)
                 .then((localEvent) => {
                     if (localEvent) {
-                        setEvent({...localEvent})
+                        setEvent({
+                            ...localEvent,
+                            startDateTime: localEvent.startDateTime,
+                            endDateTime: localEvent.endDateTime
+                        })
                     }
                 })
         }
@@ -78,6 +83,13 @@ const EditEventPage: FunctionComponent = () => {
                                     onSelected={(date) => setEvent({...event, endDateTime: date})}
                                     label="End Date Time"/>
                 </Stack>
+                {!isDatesValid() && (
+                    <Box mt={2} ml={1}>
+                        <Typography variant="body2" color="error">
+                            End date must be after start date.
+                        </Typography>
+                    </Box>
+                )}
                 <Box height="25px"/>
                 <CardActions sx={{justifyContent: 'flex-end'}}>
                     <Button size="small" disabled={disabledButton()}
