@@ -22,7 +22,6 @@ public class ControllerAdvice {
         var response = ExceptionDto.builder().message(e.getMessage())
                 .error("Not Found")
                 .status(404)
-                .path(e.getStackTrace()[0].getMethodName())
                 .timestamp(LocalDateTime.now().toString())
                 .build();
         return ResponseEntity.status(404).body(response);
@@ -31,21 +30,29 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDto> handleException(Exception e) {
         var response = ExceptionDto.builder().message(e.getMessage())
-                .error("Not Found")
+                .error("Bad Request")
                 .status(400)
-                .path(e.getStackTrace()[0].getMethodName())
                 .timestamp(LocalDateTime.now().toString())
                 .build();
         return ResponseEntity.status(400).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        var errors = ex.getBindingResult()
+    public ResponseEntity<ExceptionDto> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String allErrors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .toList();
-        return ResponseEntity.badRequest().body(errors);
+                .reduce((msg1, msg2) -> msg1 + "; " + msg2)
+                .orElse("Validation failed");
+
+        var response = ExceptionDto.builder()
+                .message(allErrors)
+                .error("Validation Error")
+                .status(400)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.badRequest().body(response);
     }
 }

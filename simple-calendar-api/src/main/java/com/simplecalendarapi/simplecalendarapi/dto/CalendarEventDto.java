@@ -2,6 +2,8 @@ package com.simplecalendarapi.simplecalendarapi.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.simplecalendarapi.simplecalendarapi.validators.date.DateRange;
+import com.simplecalendarapi.simplecalendarapi.validators.date.ValidDateRange;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
  * @author Ma1iket
  **/
 
+@ValidDateRange
 public record CalendarEventDto(
         String id,
         @NotBlank(message = "Title cannot be empty")
@@ -31,7 +34,7 @@ public record CalendarEventDto(
 
         @NotBlank(message = "Location cannot be empty")
         String location
-) {
+) implements DateRange {
 
 
 }
