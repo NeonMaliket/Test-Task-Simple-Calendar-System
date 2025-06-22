@@ -6,7 +6,7 @@ interface EllipsisWithTooltipProps {
     maxWidth?: number;
 }
 
-const EllipsisWithTooltip = ({ text, maxWidth = 200 }: EllipsisWithTooltipProps) => {
+const EllipsisWithTooltip = ({ text, maxWidth = 300 }: EllipsisWithTooltipProps) => {
     const style: CSSProperties = {
         maxWidth,
         whiteSpace: 'nowrap',
