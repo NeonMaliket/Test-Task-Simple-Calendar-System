@@ -5,8 +5,13 @@ A web-based calendar application that allows users to manage events. Users can c
 ## Run with Docker
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
+
+## Calendar will be available at
+
+[http://localhost:3000/calendar](http://localhost:3000/calendar)
+
 ## Tech Stack
 
 ### Backend
