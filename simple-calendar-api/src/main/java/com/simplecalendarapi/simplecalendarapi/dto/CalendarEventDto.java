@@ -25,9 +25,7 @@ public record CalendarEventDto(
         OffsetDateTime startDateTime,
         @NotNull(message = "End date time cannot be empty")
         OffsetDateTime endDateTime,
-        String location,
-        @NotBlank(message = "Time zone cannot be empty")
-        String timeZone
+        String location
 ) implements DateRange {
 
 

@@ -5,6 +5,5 @@ CREATE TABLE calendar_events
     description     VARCHAR(50),
     start_date_time TIMESTAMP   NOT NULL,
     end_date_time   TIMESTAMP   NOT NULL,
-    location        TEXT,
-    time_zone       VARCHAR(50) NOT NULL
+    location        TEXT
 );

@@ -6,9 +6,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-
 /**
  * @author Ma1iket
  **/
@@ -23,8 +20,7 @@ public class CalendarEventDtoMapper implements Converter<CalendarEvent, Calendar
                 source.getDescription(),
                 source.getStartDateTime(),
                 source.getEndDateTime(),
-                source.getLocation(),
-                source.getTimeZone()
+                source.getLocation()
         );
     }
 }

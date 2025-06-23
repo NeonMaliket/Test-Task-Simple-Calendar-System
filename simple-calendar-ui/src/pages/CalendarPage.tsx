@@ -25,7 +25,6 @@ const CalendarPage: React.FC = () => {
             extendedProps: {
                 description: event.description,
                 location: event.location,
-                timeZone: event.timeZone,
             },
         }));
     };
@@ -44,7 +43,7 @@ const CalendarPage: React.FC = () => {
         navigate(`/calendar/event/${event.event.id}`);
     };
 
-    const renderEventContent = (eventInfo: EventContentArg): JSX.Element => (
+    const renderEventContent = (eventInfo: EventContentArg) => (
         <Event eventInfo={eventInfo} />
     );
 

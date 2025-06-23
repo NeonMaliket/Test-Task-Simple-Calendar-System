@@ -6,8 +6,6 @@ import type {CalendarEvent} from "../types/CalendarEvent";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {DateTimePicker} from "../components/DateTimePicker.tsx";
 import dayjs from "dayjs";
-import TimeZoneSelector from "../components/TimeZonePicker.tsx";
-import {userTimeZone} from "../shared/DateUtils.ts";
 
 
 const EditEventPage: FunctionComponent = () => {
@@ -22,8 +20,7 @@ const EditEventPage: FunctionComponent = () => {
         description: "",
         location: "",
         startDateTime: dayjs(location.state?.start).toDate() ?? new Date(),
-        endDateTime: dayjs(location.state?.end).toDate() ?? new Date(),
-        timeZone: userTimeZone
+        endDateTime: dayjs(location.state?.end).toDate() ?? new Date()
     });
 
     useEffect(() => {
@@ -54,7 +51,6 @@ const EditEventPage: FunctionComponent = () => {
     }
 
     const addOrUpdate = async () => {
-        console.log("SAVING: ", event)
         if (id) {
             await update(id, event)
         } else {
@@ -85,7 +81,6 @@ const EditEventPage: FunctionComponent = () => {
                                     label="End Date Time"/>
                 </Stack>
                 <Box height="25px"/>
-                <TimeZoneSelector onChange={(zone) => setEvent({...event, timeZone: zone})}/>
                 {!isDatesValid() && (
                     <Box mt={2} ml={1}>
                         <Typography variant="body2" color="error">

@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import type {CalendarEvent} from "../types/CalendarEvent";
 import {createEvent, deleteEvent, getAllEvents, getEventById, updateEvent} from "../services/CalendarEventsService.ts";
-import {convertEventToUtc, withLocalTimeZone} from "../shared/DateUtils.ts";
 
 const useEvents = () => {
     const [events, setEvents] = useState<CalendarEvent[]>([])
@@ -10,22 +9,22 @@ const useEvents = () => {
         loadEvents().catch(error => console.error(error))
     }, [])
 
-    const wrapEventDatesWithLocalTimeZone = (event: CalendarEvent): CalendarEvent => {
+    const convertDateStringsToObj = (event: CalendarEvent): CalendarEvent => {
         return {
             ...event,
-            startDateTime: withLocalTimeZone(event.startDateTime).toDate(),
-            endDateTime: withLocalTimeZone(event.endDateTime).toDate()
+            startDateTime: new Date(event.startDateTime),
+            endDateTime: new Date(event.endDateTime)
         }
     }
     const loadEvents = async () => {
         getAllEvents()
-            .then(events => setEvents(events.map(wrapEventDatesWithLocalTimeZone)))
+            .then(events => setEvents(events.map(convertDateStringsToObj)))
             .catch(error => console.error(error))
     }
 
     const findById = async (id: string) => {
         try {
-            return await getEventById(id).then(wrapEventDatesWithLocalTimeZone)
+            return await getEventById(id).then(convertDateStringsToObj)
         } catch (error) {
             console.error(error)
         }
@@ -33,7 +32,7 @@ const useEvents = () => {
 
     const add = async (event: CalendarEvent) => {
         try {
-            await createEvent(convertEventToUtc(event))
+            await createEvent(event)
             loadEvents().catch(error => console.error(error))
         } catch (error) {
             console.error(error)
@@ -42,7 +41,7 @@ const useEvents = () => {
 
     const update = async (id: string, event: CalendarEvent) => {
         try {
-            await updateEvent(id, convertEventToUtc(event))
+            await updateEvent(id, event)
             loadEvents().catch(error => console.error(error))
         } catch (error) {
             console.error(error)

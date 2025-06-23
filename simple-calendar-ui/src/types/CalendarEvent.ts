@@ -5,5 +5,4 @@ export interface CalendarEvent {
     startDateTime: Date
     endDateTime: Date
     location?: string
-    timeZone: string
 }

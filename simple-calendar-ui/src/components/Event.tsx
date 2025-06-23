@@ -1,17 +1,16 @@
 // @flow
 import type {EventContentArg} from "@fullcalendar/core";
-import dayjs from "dayjs";
 import type {FunctionComponent} from "react";
 import {Tooltip} from "@mui/material";
-import {getTimeZoneOffset, userTimeZone, withLocalTimeZone} from "../shared/DateUtils.ts";
+import {formattedDate, getTimeZoneOffset, userTimeZone} from "../shared/DateUtils.ts";
 
 interface EventProps {
     eventInfo: EventContentArg;
 }
 
 export const Event: FunctionComponent<EventProps> = ({eventInfo}) => {
-    const start = dayjs(withLocalTimeZone(eventInfo.event.start!)).format("DD.MM.YYYY HH:mm");
-    const end = dayjs(withLocalTimeZone(eventInfo.event.end!)).format("DD.MM.YYYY HH:mm");
+    const start = formattedDate(eventInfo.event.start);
+    const end = formattedDate(eventInfo.event.end);
     const {timeZone} = eventInfo.event.extendedProps;
     return (
         <Tooltip
@@ -38,7 +37,7 @@ export const Event: FunctionComponent<EventProps> = ({eventInfo}) => {
                     {eventInfo.event.title || "(no title)"}
                 </div>
                 <div style={{fontSize: "0.7rem"}}>
-                    { start} – {end}
+                    {start} – {end}
                 </div>
                 <div style={{fontSize: "0.7rem", fontStyle: "bold"}}>
                     {userTimeZone} ({getTimeZoneOffset(userTimeZone)})
