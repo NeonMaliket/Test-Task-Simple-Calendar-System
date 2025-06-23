@@ -24,3 +24,4 @@ public class CalendarEventDtoMapper implements Converter<CalendarEvent, Calendar
         );
     }
 }
+

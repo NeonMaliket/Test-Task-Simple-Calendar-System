@@ -6,6 +6,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+
 /**
  * @author Ma1iket
  **/
@@ -24,3 +25,4 @@ public class CalendarEventMapper implements Converter<CalendarEventDto, Calendar
                 .build();
     }
 }
+

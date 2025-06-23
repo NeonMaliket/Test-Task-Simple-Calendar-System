@@ -9,15 +9,22 @@ const useEvents = () => {
         loadEvents().catch(error => console.error(error))
     }, [])
 
+    const convertDateStringsToObj = (event: CalendarEvent): CalendarEvent => {
+        return {
+            ...event,
+            startDateTime: new Date(event.startDateTime),
+            endDateTime: new Date(event.endDateTime)
+        }
+    }
     const loadEvents = async () => {
         getAllEvents()
-            .then(events => setEvents(events))
+            .then(events => setEvents(events.map(convertDateStringsToObj)))
             .catch(error => console.error(error))
     }
 
     const findById = async (id: string) => {
         try {
-            return await getEventById(id)
+            return await getEventById(id).then(convertDateStringsToObj)
         } catch (error) {
             console.error(error)
         }

@@ -4,9 +4,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
 import CardRow from "../components/CardRow";
 import useEvents from "../hooks/EventHook";
-import type {DateRange} from "../types/DateRange.ts";
-import dayjs from "dayjs";
-import {DATE_FORMAT} from "../constants/DateConstants.ts";
+import {formattedDate} from "../shared/DateUtils.ts";
 
 
 const EventDetailsPage: React.FC = () => {
@@ -29,13 +27,7 @@ const EventDetailsPage: React.FC = () => {
     }, [id])
 
     const editEvent = () => {
-        const range: DateRange = {
-            start: event ? event.startDateTime : new Date(),
-            end: event ? event.endDateTime : new Date()
-        }
-        navigate(`/calendar/event/edit/${id}`, {
-            state: range
-        })
+        navigate(`/calendar/event/edit/${id}`)
     }
 
     const deleteEvent = async () => {
@@ -43,10 +35,6 @@ const EventDetailsPage: React.FC = () => {
             await remove(id)
         }
         navigate('/calendar')
-    }
-
-    const formattedDate = (date: Date) => {
-        return dayjs(date).format(DATE_FORMAT)
     }
 
     return (

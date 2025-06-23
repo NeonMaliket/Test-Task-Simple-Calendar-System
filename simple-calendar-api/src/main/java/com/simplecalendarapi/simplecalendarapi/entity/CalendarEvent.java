@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * @author Ma1iket
@@ -30,11 +30,11 @@ public class CalendarEvent implements Serializable {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "start_date_time", nullable = false)
-    private LocalDateTime startDateTime;
+    @Column(name = "start_date_time", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private OffsetDateTime startDateTime;
 
-    @Column(name = "end_date_time", nullable = false)
-    private LocalDateTime endDateTime;
+    @Column(name = "end_date_time", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private OffsetDateTime endDateTime;
 
     @Column(name = "location", nullable = false)
     private String location;

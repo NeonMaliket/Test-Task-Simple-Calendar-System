@@ -31,13 +31,4 @@ public class AppConfig {
             }
         };
     }
-
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
-        return builder -> builder
-                .modules(new JavaTimeModule())
-                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    }
-
-
 }

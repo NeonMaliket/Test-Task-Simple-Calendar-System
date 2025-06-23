@@ -2,6 +2,11 @@
 
 A web-based calendar application that allows users to manage events. Users can create, update, delete, and view events. The system supports time zone-aware timestamps and displays them in the user's local time.
 
+## Run with Docker
+
+```bash
+docker-compose up --build
+```
 ## Tech Stack
 
 ### Backend
@@ -37,8 +42,3 @@ A web-based calendar application that allows users to manage events. Users can c
 | POST   | `/events`      | Create a new event         |
 | PUT    | `/events/{id}` | Update an existing event   |
 | DELETE | `/events/{id}` | Delete an event            |
-
-## Run with Docker
-
-```bash
-docker-compose up --build
